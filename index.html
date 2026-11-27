@@ -281,7 +281,7 @@
         }
 
         .ani-kart:active {
-            transform: scale(0.985) !important;
+            transform: scale(0.985);
         }
 
         .ani-tarih {
@@ -475,3 +475,220 @@
             <div class="ani-foto-cerceve">
                 <img id="aniFoto" class="ani-foto" src="1.jpg" alt="Anı fotoğrafı">
             </div>
+            <div class="ani-not" id="aniNot">ilk çıkma teklifim :)</div>
+        </div>
+
+        <div class="ani-ipucu">Sıradaki fotoğrafa geçmek için karta veya butona dokun</div>
+        <button class="ana-buton" id="aniIleriButon" onclick="sonrakiAni()">SONRAKİ</button>
+    </section>
+
+    <!-- YAKIN INCELEME PENCERESI -->
+    <div class="buyuk-pencere" id="buyukPencere" onclick="buyukGorselKapat()">
+        <img id="buyukGorsel" class="buyuk-gorsel" src="" alt="Büyütülmüş anı">
+        <button type="button" class="kapat-buton" onclick="buyukGorselKapat()">Kapat</button>
+    </div>
+
+    <!-- FINAL EKRANI -->
+    <section class="ekran" id="ekran-final">
+        <div class="final-kutu">
+            <h2>İyi ki Varsın</h2>
+            <p>2027'de de her yeni günde yan yana, el ele nice güzel anılarımız olsun.</p>
+        </div>
+
+        <button class="ana-buton" onclick="anilariBaslat()">ANILARI TEKRAR İZLE</button>
+        <button class="ikincil-buton" onclick="ekranDegistir('ekran-giris')">Ana Menüye Dön</button>
+    </section>
+
+    <script>
+        const BASLANGIC_TARIHI = new Date(2025, 5, 26); // 26 Haziran 2025
+
+        // Sirasiyla 1.jpg -> 2.jpg -> 3.jpg -> 4.jpg -> 5.jpg
+        const ANILAR = [
+            {
+                foto: '1.jpg',
+                tarih: '26 Haziran 2025',
+                not: 'ilk çıkma teklifim :)',
+                egim: '-1.5deg',
+                kaydirX: '-4px'
+            },
+            {
+                foto: '2.jpg',
+                tarih: '26 Temmuz 2025',
+                not: '1. ay kutlama mesajın , hala özlüyorum',
+                egim: '1.8deg',
+                kaydirX: '5px'
+            },
+            {
+                foto: '3.jpg',
+                tarih: '5 Şubat 2026',
+                not: 'doğum günümü kutladığın mesaj , hayatımda aldığım en güzel mesajlardan biri , daha iyileride senden gelmişti zaten',
+                egim: '-1.2deg',
+                kaydirX: '3px'
+            },
+            {
+                foto: '4.jpg',
+                tarih: '14 Şubat 2026',
+                not: 'sevgililer gününde de unutmadın bizi aşkım',
+                egim: '1.4deg',
+                kaydirX: '-5px'
+            },
+            {
+                foto: '5.jpg',
+                tarih: '26 Haziran 2026',
+                not: '1. yıl mesajın ama aramız o zamanlar birazcık kavgalıydı , biz yinede iyi tarafına bakalım hayatım',
+                egim: '-1.8deg',
+                kaydirX: '4px'
+            }
+        ];
+
+        let aktifAniIndeksi = 0;
+
+        function birliktelikSuresiniGuncelle() {
+            const simdi = new Date();
+            const bugun = new Date(simdi.getFullYear(), simdi.getMonth(), simdi.getDate());
+
+            let yil = bugun.getFullYear() - BASLANGIC_TARIHI.getFullYear();
+            let ay = bugun.getMonth() - BASLANGIC_TARIHI.getMonth();
+            let gun = bugun.getDate() - BASLANGIC_TARIHI.getDate();
+
+            if (gun < 0) {
+                const oncekiAySonGun = new Date(bugun.getFullYear(), bugun.getMonth(), 0).getDate();
+                gun += oncekiAySonGun;
+                ay -= 1;
+            }
+
+            if (ay < 0) {
+                ay += 12;
+                yil -= 1;
+            }
+
+            if (yil < 0) {
+                yil = 0;
+                ay = 0;
+                gun = 0;
+            }
+
+            const toplamGun = Math.max(0, Math.floor((bugun - BASLANGIC_TARIHI) / (1000 * 60 * 60 * 24)));
+
+            const parcalar = [];
+            if (yil > 0) parcalar.push(`${yil} yıl`);
+            if (ay > 0) parcalar.push(`${ay} ay`);
+            if (gun > 0 || parcalar.length === 0) parcalar.push(`${gun} gün`);
+
+            const anaMetin = document.getElementById('tarihAnaMetin');
+            const altMetin = document.getElementById('tarihAltMetin');
+
+            if (anaMetin) {
+                anaMetin.textContent = `Tam olarak ${parcalar.join(' ')} oldu`;
+            }
+            if (altMetin) {
+                altMetin.textContent = `${toplamGun} gün • 26 Haziran 2025'ten bu yana`;
+            }
+        }
+
+        function aniKartiniGoster(indeks) {
+            const ani = ANILAR[indeks];
+            if (!ani) return;
+
+            const kartEl = document.getElementById('aniKart');
+            const fotoEl = document.getElementById('aniFoto');
+            const tarihEl = document.getElementById('aniTarih');
+            const notEl = document.getElementById('aniNot');
+            const sayacEl = document.getElementById('aniSayac');
+            const ileriButon = document.getElementById('aniIleriButon');
+
+            if (kartEl) kartEl.style.transform = `translateX(${ani.kaydirX}) rotate(${ani.egim})`;
+            if (fotoEl) {
+                fotoEl.src = ani.foto;
+                fotoEl.alt = `${ani.tarih} fotoğrafı`;
+            }
+            if (tarihEl) tarihEl.textContent = ani.tarih;
+            if (notEl) notEl.textContent = ani.not;
+            if (sayacEl) sayacEl.textContent = `${indeks + 1} / ${ANILAR.length}`;
+            if (ileriButon) ileriButon.textContent = indeks === ANILAR.length - 1 ? 'BİTİR' : 'SONRAKİ';
+        }
+
+        function buyukGorselAc() {
+            const ani = ANILAR[aktifAniIndeksi];
+            if (!ani) return;
+            const gorsel = document.getElementById('buyukGorsel');
+            const pencere = document.getElementById('buyukPencere');
+            if (gorsel) gorsel.src = ani.foto;
+            if (pencere) pencere.classList.add('acik');
+        }
+
+        function buyukGorselKapat() {
+            const pencere = document.getElementById('buyukPencere');
+            if (pencere) pencere.classList.remove('acik');
+        }
+
+        function anilariBaslat() {
+            aktifAniIndeksi = 0;
+            aniKartiniGoster(aktifAniIndeksi);
+            ekranDegistir('ekran-anilar');
+        }
+
+        function sonrakiAni() {
+            if (aktifAniIndeksi < ANILAR.length - 1) {
+                aktifAniIndeksi += 1;
+                aniKartiniGoster(aktifAniIndeksi);
+            } else {
+                ekranDegistir('ekran-final');
+            }
+        }
+
+        function ekranDegistir(hedefEkranId) {
+            if (hedefEkranId === 'ekran-tarih') {
+                birliktelikSuresiniGuncelle();
+            }
+
+            const tumEkranlar = document.querySelectorAll('.ekran');
+            tumEkranlar.forEach(ekran => {
+                ekran.classList.remove('aktif');
+            });
+
+            const hedef = document.getElementById(hedefEkranId) || document.getElementById('ekran-giris');
+            if (hedef) {
+                hedef.classList.add('aktif');
+            }
+        }
+
+        function uygulamaModunuKontrolEt() {
+            const standaloneMod = window.navigator.standalone === true ||
+                                    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+
+            if (standaloneMod) {
+                ekranDegistir('ekran-giris');
+            } else {
+                ekranDegistir('ekran-kurulum');
+            }
+        }
+
+        function iphoneRehberAc() {
+            const rehber = document.getElementById('iphoneRehber');
+            if (rehber) rehber.classList.add('acik');
+        }
+
+        function sifreKontrolEt() {
+            const input = document.getElementById('sifreGirdisi');
+            const hata = document.getElementById('sifreHata');
+            if (!input || !hata) return;
+
+            const girilen = input.value.trim().toLocaleLowerCase('tr').replace(/\s+/g, '');
+
+            if (girilen === '26haziran') {
+                hata.textContent = '';
+                input.value = '';
+                ekranDegistir('ekran-tarih');
+            } else {
+                hata.textContent = 'Şifre yanlış, tekrar dene.';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            birliktelikSuresiniGuncelle();
+            uygulamaModunuKontrolEt();
+        });
+    </script>
+</body>
+</html>
