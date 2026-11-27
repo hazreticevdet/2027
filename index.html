@@ -42,8 +42,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            overflow: hidden;
+            padding: 20px;
+            overflow-x: hidden;
             user-select: none;
         }
 
@@ -51,9 +51,9 @@
         .ekran {
             display: none;
             width: 100%;
-            max-width: 380px;
+            max-width: 390px;
             text-align: center;
-            animation: yumusakGecis 0.4s ease forwards;
+            animation: yumusakGecis 0.35s ease forwards;
         }
 
         .ekran.aktif {
@@ -152,10 +152,10 @@
             color: var(--bg-vanilya);
             border: none;
             border-radius: 16px;
-            padding: 16px 34px;
-            font-size: 0.98rem;
+            padding: 15px 30px;
+            font-size: 0.96rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             cursor: pointer;
             box-shadow: 0 6px 0 var(--kahve-buton-basili);
             transition: transform 0.1s ease, box-shadow 0.1s ease;
@@ -238,36 +238,116 @@
             color: var(--kahve-orta);
         }
 
-        /* === ANILAR ISKELETI === */
-        .gecici-kutu {
+        /* === ANILAR KARTLARI (HAFIF ASAGIDA, DAGINIK & YUMUSAK KOSESIZ) === */
+        #ekran-anilar.aktif {
+            justify-content: flex-end;
+            min-height: calc(100vh - 40px);
+            padding-top: 28px;
+        }
+
+        .ani-ust-bilgi {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 0 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--kahve-orta);
+        }
+
+        .ani-kart {
             background-color: var(--kart-krem);
             border: 1px solid var(--sinir);
-            border-radius: 20px;
-            padding: 28px 20px;
-            width: 100%;
+            border-radius: 30px;
+            padding: 16px 15px 18px;
+            width: 96%;
+            cursor: pointer;
+            margin-bottom: 16px;
+            box-shadow: 0 12px 24px rgba(74, 55, 40, 0.08);
+            transition: transform 0.25s ease;
         }
 
-        .gecici-kutu h2 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--kahve-koyu);
+        .ani-kart:active {
+            transform: scale(0.985) !important;
         }
 
-        .gecici-kutu p {
-            font-size: 0.9rem;
+        .ani-tarih {
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
             color: var(--kahve-orta);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .geri-buton {
+        .ani-foto-cerceve {
+            width: 100%;
+            aspect-ratio: 4 / 4.6;
+            border-radius: 24px;
+            overflow: hidden;
+            background-color: var(--bg-vanilya);
+            border: 1px solid var(--sinir);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ani-foto {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 24px;
+        }
+
+        .ani-not {
+            font-size: 0.93rem;
+            font-weight: 500;
+            color: var(--kahve-koyu);
+            line-height: 1.48;
+            padding: 0 4px;
+        }
+
+        .ani-ipucu {
+            font-size: 0.76rem;
+            color: var(--kahve-orta);
+            margin-bottom: 12px;
+        }
+
+        /* === FINAL EKRANI === */
+        .final-kutu {
+            background-color: var(--kart-krem);
+            border: 1px solid var(--sinir);
+            border-radius: 24px;
+            padding: 34px 22px;
+            width: 100%;
+            margin-bottom: 22px;
+        }
+
+        .final-kutu h2 {
+            font-size: 1.55rem;
+            color: var(--kahve-koyu);
+            margin-bottom: 12px;
+        }
+
+        .final-kutu p {
+            font-size: 0.95rem;
+            color: var(--kahve-orta);
+            line-height: 1.6;
+        }
+
+        .ikincil-buton {
             background: transparent;
             border: 1px solid var(--kahve-orta);
             color: var(--kahve-koyu);
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-size: 0.85rem;
+            padding: 11px 22px;
+            border-radius: 13px;
+            font-size: 0.86rem;
             font-weight: 600;
             cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -328,20 +408,82 @@
             <div class="tarih-alt-metin" id="tarihAltMetin">26 Haziran 2025'ten bu yana</div>
         </div>
 
-        <button class="ana-buton" onclick="ekranDegistir('ekran-anilar')">DEVAM</button>
+        <button class="ana-buton" onclick="anilariBaslat()">DEVAM</button>
     </section>
 
-    <!-- ANILAR ISKELETI -->
+    <!-- ANILAR KARTLARI EKRANI -->
     <section class="ekran" id="ekran-anilar">
-        <div class="gecici-kutu">
-            <h2>Anılar Ekranı Hazır</h2>
-            <p>Sonraki güncellemede buraya fotoğraflı, tarihli ve tıkla-geç mantığıyla çalışan anı kartları gelecek.</p>
-            <button class="geri-buton" onclick="ekranDegistir('ekran-giris')">← Ana Menüye Dön</button>
+        <div class="ani-ust-bilgi">
+            <span>Anılarımız</span>
+            <span id="aniSayac">1 / 5</span>
         </div>
+
+        <div class="ani-kart" id="aniKart" onclick="sonrakiAni()">
+            <div class="ani-tarih" id="aniTarih">26 Haziran 2025</div>
+            <div class="ani-foto-cerceve">
+                <img id="aniFoto" class="ani-foto" src="1.jpg" alt="Anı fotoğrafı">
+            </div>
+            <div class="ani-not" id="aniNot">ilk çıkma teklifim :)</div>
+        </div>
+
+        <div class="ani-ipucu">Sıradaki fotoğrafa geçmek için karta veya butona dokun</div>
+        <button class="ana-buton" id="aniIleriButon" onclick="sonrakiAni()">SONRAKİ</button>
+    </section>
+
+    <!-- FINAL EKRANI -->
+    <section class="ekran" id="ekran-final">
+        <div class="final-kutu">
+            <h2>İyi ki Varsın</h2>
+            <p>2027'de de her yeni günde yan yana, el ele nice güzel anılarımız olsun.</p>
+        </div>
+
+        <button class="ana-buton" onclick="anilariBaslat()">ANILARI TEKRAR İZLE</button>
+        <button class="ikincil-buton" onclick="ekranDegistir('ekran-giris')">Ana Menüye Dön</button>
     </section>
 
     <script>
         const BASLANGIC_TARIHI = new Date(2025, 5, 26); // 26 Haziran 2025
+
+        // Sirasiyla 1.jpg -> 2.jpg -> 3.jpg -> 4.jpg -> 5.jpg
+        const ANILAR = [
+            {
+                foto: '1.jpg',
+                tarih: '26 Haziran 2025',
+                not: 'ilk çıkma teklifim :)',
+                egim: '-1.5deg',
+                kaydirX: '-4px'
+            },
+            {
+                foto: '2.jpg',
+                tarih: '26 Temmuz 2025',
+                not: '1. ay kutlama mesajın , hala özlüyorum',
+                egim: '1.8deg',
+                kaydirX: '5px'
+            },
+            {
+                foto: '3.jpg',
+                tarih: '5 Şubat 2026',
+                not: 'doğum günümü kutladığın mesaj , hayatımda aldığım en güzel mesajlardan biri , daha iyileride senden gelmişti zaten',
+                egim: '-1.2deg',
+                kaydirX: '3px'
+            },
+            {
+                foto: '4.jpg',
+                tarih: '14 Şubat 2026',
+                not: 'sevgililer gününde de unutmadın bizi aşkım',
+                egim: '1.4deg',
+                kaydirX: '-5px'
+            },
+            {
+                foto: '5.jpg',
+                tarih: '26 Haziran 2026',
+                not: '1. yıl mesajın ama aramız o zamanlar birazcık kavgalıydı , biz yinede iyi tarafına bakalım hayatım',
+                egim: '-1.8deg',
+                kaydirX: '4px'
+            }
+        ];
+
+        let aktifAniIndeksi = 0;
 
         function birliktelikSuresiniGuncelle() {
             const simdi = new Date();
@@ -383,6 +525,41 @@
             }
             if (altMetin) {
                 altMetin.textContent = `${toplamGun} gün • 26 Haziran 2025'ten bu yana`;
+            }
+        }
+
+        function aniKartiniGoster(indeks) {
+            const ani = ANILAR[indeks];
+            if (!ani) return;
+
+            const kartEl = document.getElementById('aniKart');
+            const fotoEl = document.getElementById('aniFoto');
+            const tarihEl = document.getElementById('aniTarih');
+            const notEl = document.getElementById('aniNot');
+            const sayacEl = document.getElementById('aniSayac');
+            const ileriButon = document.getElementById('aniIleriButon');
+
+            kartEl.style.transform = `translateX(${ani.kaydirX}) rotate(${ani.egim})`;
+            fotoEl.src = ani.foto;
+            fotoEl.alt = `${ani.tarih} fotoğrafı`;
+            tarihEl.textContent = ani.tarih;
+            notEl.textContent = ani.not;
+            sayacEl.textContent = `${indeks + 1} / ${ANILAR.length}`;
+            ileriButon.textContent = indeks === ANILAR.length - 1 ? 'BİTİR' : 'SONRAKİ';
+        }
+
+        function anilariBaslat() {
+            aktifAniIndeksi = 0;
+            aniKartiniGoster(aktifAniIndeksi);
+            ekranDegistir('ekran-anilar');
+        }
+
+        function sonrakiAni() {
+            if (aktifAniIndeksi < ANILAR.length - 1) {
+                aktifAniIndeksi += 1;
+                aniKartiniGoster(aktifAniIndeksi);
+            } else {
+                ekranDegistir('ekran-final');
             }
         }
 
