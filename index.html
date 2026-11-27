@@ -74,6 +74,16 @@
             }
         }
 
+        /* === ACILIS INTRO EKRANI === */
+        .intro-metin {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 2.2px;
+            line-height: 1.65;
+            color: var(--kahve-koyu);
+            padding: 18px 12px;
+        }
+
         /* === IPHONE KURULUM EKRANI === */
         .kurulum-kart {
             background-color: var(--kart-krem);
@@ -422,7 +432,12 @@
         </div>
     </section>
 
-    <!-- ANA MENU (ANA EKRANDAKI IKONDAN GIRILINCE DIREKT BURASI ACILIR) -->
+    <!-- ACILIS INTRO EKRANI -->
+    <section class="ekran" id="ekran-intro">
+        <div class="intro-metin">İBRAHİM CEVDET BOZKURT GURURLA SUNAR</div>
+    </section>
+
+    <!-- ANA MENU (ANA EKRANDAKI IKONDAN GIRILINCE INTRO'DAN SONRA BURASI ACILIR) -->
     <main class="ekran" id="ekran-giris">
         <span class="minik-etiket">Melike Ebrar</span>
         <h1 class="ana-baslik">2027'ye Hoş Geldin</h1>
@@ -658,7 +673,13 @@
                                     (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
 
             if (standaloneMod) {
-                ekranDegistir('ekran-giris');
+                ekranDegistir('ekran-intro');
+                setTimeout(() => {
+                    const aktifIntro = document.getElementById('ekran-intro');
+                    if (aktifIntro && aktifIntro.classList.contains('aktif')) {
+                        ekranDegistir('ekran-giris');
+                    }
+                }, 2500);
             } else {
                 ekranDegistir('ekran-kurulum');
             }
