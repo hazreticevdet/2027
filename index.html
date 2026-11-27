@@ -9,12 +9,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="2027">
 
-    <!-- Ozel Vanilya-Kahve Uygulama Simgesi (iPhone siyah-beyaz / tek harf sorununu cozer) -->
+    <!-- Ozel Vanilya-Kahve Uygulama Simgesi -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23FAF6F0'/%3E%3Crect x='14' y='14' width='152' height='152' rx='32' fill='%23F2EAE0' stroke='%23E2D5C5' stroke-width='4'/%3E%3Ctext x='90' y='82' text-anchor='middle' font-family='-apple-system, BlinkMacSystemFont, sans-serif' font-size='44' font-weight='800' fill='%234A3728'%3E2027%3C/text%3E%3Ctext x='90' y='124' text-anchor='middle' font-family='-apple-system, BlinkMacSystemFont, sans-serif' font-size='26' fill='%237A5C43'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
 
     <title>2027</title>
     <style>
-        /* === 1. GUN: VANILYA & KAHVE RENK PALETI === */
+        /* === VANILYA & KAHVE RENK PALETI === */
         :root {
             --bg-vanilya: #FAF6F0;
             --kart-krem: #F2EAE0;
@@ -23,6 +23,7 @@
             --kahve-buton: #5C4332;
             --kahve-buton-basili: #3E2C20;
             --sinir: #E2D5C5;
+            --hata: #9E3B33;
         }
 
         * {
@@ -115,17 +116,6 @@
             animation: yumusakGecis 0.25s ease;
         }
 
-        .onizleme-link {
-            margin-top: 20px;
-            background: none;
-            border: none;
-            color: var(--kahve-orta);
-            font-size: 0.78rem;
-            text-decoration: underline;
-            cursor: pointer;
-            opacity: 0.75;
-        }
-
         /* === ANA MENU === */
         .minik-etiket {
             font-size: 0.78rem;
@@ -178,6 +168,76 @@
             box-shadow: 0 2px 0 var(--kahve-buton-basili);
         }
 
+        /* === SIFRE EKRANI === */
+        .sifre-kutu {
+            background-color: var(--kart-krem);
+            border: 1px solid var(--sinir);
+            border-radius: 24px;
+            padding: 32px 22px;
+            width: 100%;
+        }
+
+        .sifre-baslik {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--kahve-koyu);
+            margin-bottom: 8px;
+        }
+
+        .sifre-aciklama {
+            font-size: 0.9rem;
+            color: var(--kahve-orta);
+            margin-bottom: 22px;
+        }
+
+        .sifre-input {
+            width: 100%;
+            max-width: 260px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--sinir);
+            background-color: var(--bg-vanilya);
+            color: var(--kahve-koyu);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 14px;
+        }
+
+        .sifre-input:focus {
+            border-color: var(--kahve-buton);
+        }
+
+        .hata-mesaji {
+            min-height: 20px;
+            font-size: 0.84rem;
+            color: var(--hata);
+            margin-bottom: 14px;
+        }
+
+        /* === BIRLIKTELIK TARIH EKRANI === */
+        .tarih-kutu {
+            background-color: var(--kart-krem);
+            border: 1px solid var(--sinir);
+            border-radius: 24px;
+            padding: 40px 22px;
+            width: 100%;
+            margin-bottom: 28px;
+        }
+
+        .tarih-ana-metin {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--kahve-koyu);
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .tarih-alt-metin {
+            font-size: 0.92rem;
+            color: var(--kahve-orta);
+        }
+
         /* === ANILAR ISKELETI === */
         .gecici-kutu {
             background-color: var(--kart-krem);
@@ -228,8 +288,6 @@
                 3. Sağ üstten <strong>"Ekle"</strong> de; ardından ana ekrandaki <strong>2027</strong> simgesine dokunarak gir.
             </div>
         </div>
-
-        <button class="onizleme-link" onclick="ekranDegistir('ekran-giris')">Geliştirici Önizlemesi (Ana Menüye Geç)</button>
     </section>
 
     <!-- ANA MENU (ANA EKRANDAKI IKONDAN GIRILINCE DIREKT BURASI ACILIR) -->
@@ -238,10 +296,42 @@
         <h1 class="ana-baslik">2027'ye Hoş Geldin</h1>
         <p class="alt-aciklama">Senin için hazırladığım küçük bir yolculuk...</p>
 
-        <button class="ana-buton" onclick="ekranDegistir('ekran-anilar')">BAŞLA</button>
+        <button class="ana-buton" onclick="ekranDegistir('ekran-sifre')">BAŞLA</button>
     </main>
 
-    <!-- ANILAR ISKELETI (SIRADAKI GUNDE DOLDURULACAK) -->
+    <!-- SIFRE EKRANI -->
+    <section class="ekran" id="ekran-sifre">
+        <div class="sifre-kutu">
+            <h2 class="sifre-baslik">Şifre</h2>
+            <p class="sifre-aciklama">Devam etmek için özel şifreyi gir.</p>
+
+            <input
+                type="text"
+                id="sifreGirdisi"
+                class="sifre-input"
+                placeholder="Şifreyi yaz..."
+                autocomplete="off"
+                autocapitalize="none"
+                onkeydown="if(event.key === 'Enter') sifreKontrolEt()"
+            >
+
+            <div class="hata-mesaji" id="sifreHata"></div>
+
+            <button class="ana-buton" onclick="sifreKontrolEt()">GİRİŞ</button>
+        </div>
+    </section>
+
+    <!-- BIRLIKTELIK SURESI EKRANI -->
+    <section class="ekran" id="ekran-tarih">
+        <div class="tarih-kutu">
+            <div class="tarih-ana-metin">1 Yıl, 6 Ay, 6 Gün</div>
+            <div class="tarih-alt-metin">554 Gün</div>
+        </div>
+
+        <button class="ana-buton" onclick="ekranDegistir('ekran-anilar')">DEVAM</button>
+    </section>
+
+    <!-- ANILAR ISKELETI -->
     <section class="ekran" id="ekran-anilar">
         <div class="gecici-kutu">
             <h2>Anılar Ekranı Hazır</h2>
@@ -275,6 +365,20 @@
             const hedef = document.getElementById(hedefEkranId);
             if (hedef) {
                 hedef.classList.add('aktif');
+            }
+        }
+
+        function sifreKontrolEt() {
+            const input = document.getElementById('sifreGirdisi');
+            const hata = document.getElementById('sifreHata');
+            const girilen = input.value.trim().toLocaleLowerCase('tr').replace(/\s+/g, '');
+
+            if (girilen === '26haziran') {
+                hata.textContent = '';
+                input.value = '';
+                ekranDegistir('ekran-tarih');
+            } else {
+                hata.textContent = 'Şifre yanlış kanka, tekrar dene.';
             }
         }
 
